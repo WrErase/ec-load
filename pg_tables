@@ -1,0 +1,66 @@
+# orders
+
+     Column      |            Type             |   Modifiers
+-----------------+-----------------------------+---------------
+ order_id        | bigint                      | not null
+ type_id         | integer                     |
+ bid             | boolean                     |
+ region_id       | integer                     |
+ solar_system_id | integer                     |
+ station_id      | integer                     |
+ price           | numeric                     |
+ min_vol         | integer                     |
+ vol_remain      | integer                     |
+ vol_enter       | integer                     |
+ range           | integer                     |
+ duration        | integer                     |
+ issued          | timestamp without time zone |
+ expires         | timestamp without time zone |
+ reported_ts     | timestamp without time zone |
+ gen_name        | character varying(255)      |
+ gen_version     | character varying(255)      |
+ outlier         | boolean                     | default false
+Indexes:
+    "orders_pkey" PRIMARY KEY, btree (order_id)
+    "index_orders_on_bid_and_type_and_expires_and_reported" btree (price, bid, type_id, expires, reported_ts)
+    "index_orders_on_solar_system_id" btree (solar_system_id)
+    "index_orders_on_type_and_and_expires_and_reported" btree (type_id, expires, reported_ts)
+    "index_orders_on_type_and_region_and_expires_and_reported" btree (type_id, region_id, expires, reported_ts)
+
+# order_stats
+
+    Column    |            Type             |                        Modifiers
+--------------+-----------------------------+----------------------------------------------------------
+ id           | integer                     | not null default nextval('order_stats_id_seq'::regclass)
+ type_id      | integer                     |
+ region_id    | integer                     |
+ median       | double precision            |
+ max_buy      | double precision            |
+ min_sell     | double precision            |
+ mid_buy_sell | double precision            |
+ buy_vol      | bigint                      |
+ sell_vol     | bigint                      |
+ sim_buy      | double precision            |
+ sim_sell     | double precision            |
+ ts           | timestamp without time zone |
+ weighted_avg | double precision            |
+Indexes:
+    "order_stats_pkey" PRIMARY KEY, btree (id)
+    "index_order_stats_on_region_id" btree (region_id)
+    "index_order_stats_on_type_id" btree (type_id)
+    "index_order_stats_on_type_id_and_region_id_and_ts" btree (type_id, region_id, ts)
+
+# order_logs
+
+   Column    |            Type             |                        Modifiers
+-------------+-----------------------------+---------------------------------------------------------
+ id          | integer                     | not null default nextval('order_logs_id_seq'::regclass)
+ order_id    | bigint                      |
+ price       | numeric                     |
+ vol_remain  | integer                     |
+ reported_ts | timestamp without time zone |
+ gen_name    | character varying(255)      |
+ gen_version | character varying(255)      |
+Indexes:
+    "order_logs_pkey" PRIMARY KEY, btree (id)
+    "index_order_logs_on_order_id_and_reported_ts" UNIQUE, btree (order_id, reported_ts)
