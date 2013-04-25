@@ -3,6 +3,9 @@
 Clojure code written to import Eve Central CSV Dumps (http://eve-central.com/dumps) into a postgres database.
 Basic validations are included, as well as history logging and generation of order statistics.
 
+The main goal was to use [pmap](http://clojuredocs.org/clojure_core/clojure.core/pmap) to improve the performance
+of the import and statistics generation code by running it across multiple cores.
+
 My first attempt with Clojure, and still very much under construction (but working).
 
 Written to import files into db for https://github.com/WrErase/eveyl
